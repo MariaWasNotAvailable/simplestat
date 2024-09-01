@@ -1,0 +1,17 @@
+#!/bin/bash
+
+printf "\nDisk usage:\n"
+df -h /
+printf "\nMemory usage:\n"
+free -m
+printf "\nCPU usage:\n"
+mpstat
+printf "\nProcess count:\n"
+ps -e | wc -l
+printf "\nUptime:\n"
+uptime -p
+printf "\nTop 3 processes by memory usage:\n"
+ps -eo pid,comm,size,%cpu --sort=-%mem | head -4 | awk 'NR>1 {$3=int($3/1024)"M";}{ printf "%8s %-20s %5s %5s %5s\n", $1, $2, $3, $4, $5;}'
+printf "By CPU utilization:\n"
+ps -eo pid,comm,size,%cpu --sort=-%cpu | head -4 | tail +2 | awk 'NR>1 {$3=int($3/1024)"M";}{ printf "%8s %-20s %5s %5s %5s\n", $1, $2, $3, $4, $5;}'
+printf "\n"
